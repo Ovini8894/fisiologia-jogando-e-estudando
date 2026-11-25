@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Fisiologia jogando e estudando</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:light dark;
+--bg:light-dark(#fff7ec,#12152b);--card:light-dark(#ffffff,#1c2140);--card2:light-dark(#f6f1ff,#252b52);
+--ink:light-dark(#1f2147,#eef0ff);--mut:light-dark(#61668f,#a9aedb);--line:light-dark(#ece4f5,#2f3663);
+--sky1:light-dark(#6ec6ff,#0d1838);--sky2:light-dark(#c9ecff,#283a78);--sun:light-dark(#ffd43b,#f1f3ff);
+--h1:light-dark(#9ee07a,#1f4d3a);--h2:light-dark(#6cc957,#163d2e);--h3:light-dark(#4cb447,#10301f);
+--tree:light-dark(#2f9e44,#0d5c35);--road:light-dark(#ffe3a3,#5a4a7a);--cloud:light-dark(#ffffff,#3b4a86);
+--c:#3a86ff;--ok:light-dark(#12a150,#4fe08f);--okbg:light-dark(#e4f8ec,#173b2c);
+--bad:light-dark(#e5383b,#ff7b7d);--badbg:light-dark(#ffe8e8,#43202a);--gold:#ffc53d;--pink:#ff4d8d}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Nunito,system-ui,sans-serif;font-weight:600;overflow-x:clip}
+h1,h2,h3,.disp{font-family:"Baloo 2",Nunito,system-ui,sans-serif;line-height:1.05;text-wrap:balance;margin:0}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+button:focus-visible,input:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.wrap{max-width:1120px;margin:0 auto;padding:0 max(4vw,16px)}
+.view[hidden]{display:none!important}
+
+/* paisagem */
+.hero{position:relative;background:linear-gradient(180deg,var(--sky1),var(--sky2) 75%);overflow:hidden;padding-top:24px}
+.top{position:relative;z-index:3;display:flex;flex-wrap:wrap;gap:14px 24px;align-items:center;justify-content:space-between}
+.top h1{font-size:clamp(34px,5.4vw,54px);font-weight:800;color:#fff;text-shadow:0 3px 0 rgba(20,40,110,.35)}
+.top h1 span{color:var(--gold)}
+.top p{margin:2px 0 0;color:light-dark(#163a6b,#c9d4ff);max-width:560px;font-weight:700}
+.stats{display:flex;gap:10px;flex-wrap:wrap}
+.stat{background:light-dark(rgba(255,255,255,.85),rgba(20,26,60,.7));border-radius:16px;padding:8px 14px;min-width:96px;box-shadow:0 4px 0 rgba(20,40,110,.15);display:flex;gap:10px;align-items:center}
+.stat svg{width:30px;height:30px;flex:none}
+.stat b{display:block;font:800 22px/1 "Baloo 2",sans-serif;color:var(--ink)}
+.stat small{font-size:13px;color:var(--mut)}
+.toplinks{position:relative;z-index:3;display:flex;gap:8px;justify-content:flex-end;margin-bottom:10px;flex-wrap:wrap}
+.toplinks button{background:light-dark(rgba(255,255,255,.75),rgba(20,26,60,.6));border:0;border-radius:99px;padding:6px 14px;font-weight:800;font-size:14px;min-height:36px}
+.land{position:relative;margin-top:6px}.land>.bg{position:absolute;inset:0 0 -3px 0;width:100%;height:100%}.scene{position:relative;aspect-ratio:1000/400}
+.scene>svg{position:absolute;inset:0;width:100%;height:100%}
+.cloud{animation:drift 40s linear infinite}
+.cloud.b{animation-duration:60s;animation-delay:-25s}
+@keyframes drift{from{transform:translateX(-200px)}to{transform:translateX(1150px)}}
+.st{position:absolute;transform:translate(-50%,-62%);display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:0;padding:0;width:128px;text-align:center;z-index:2}
+.tok{position:relative;width:64px;height:64px;border-radius:50%;background:var(--tc);display:grid;place-items:center;border:5px solid #fff;box-shadow:0 6px 0 color-mix(in srgb,var(--tc) 60%,#000),0 14px 18px rgba(0,0,0,.22);transition:transform .2s}
+.tok svg{width:30px;height:30px}
+.tok em{position:absolute;top:-10px;right:-14px;background:#fff;color:var(--tc);font:800 13px/1 "Baloo 2",sans-serif;font-style:normal;padding:5px 7px;border-radius:99px;box-shadow:0 2px 6px rgba(0,0,0,.15)}
+.st:hover .tok{transform:translateY(-6px) rotate(-4deg)}
+.st.boss .tok{width:80px;height:80px}
+.lbl{background:light-dark(#fff,#1c2140);color:var(--ink);font:800 15px/1.2 "Baloo 2",sans-serif;padding:4px 12px 2px;border-radius:99px;box-shadow:0 3px 0 rgba(0,0,0,.12);margin-top:6px}
+.lbl small{display:block;font:700 12px Nunito,sans-serif;color:var(--mut)}
+.stars{color:var(--gold);letter-spacing:1px;font-size:17px;line-height:1;text-shadow:0 1px 0 #b7791f;background:light-dark(rgba(255,255,255,.7),rgba(20,26,60,.6));padding:3px 8px;border-radius:99px}
+.stars i{font-style:normal;color:light-dark(#c9c3d9,#4a5185);text-shadow:none}
+
+main{padding:22px 0 64px}
+.sec{margin:0 0 14px;font-size:30px;font-weight:800}
+.modes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-bottom:40px}
+.mode{position:relative;background:var(--card);border:0;border-radius:22px;padding:20px;text-align:left;display:flex;flex-direction:column;gap:6px;box-shadow:0 6px 0 var(--line);transition:transform .18s,box-shadow .18s;overflow:hidden}
+.mode::after{content:"";position:absolute;right:-30px;bottom:-30px;width:110px;height:110px;border-radius:50%;background:var(--mc);opacity:.12}
+.mode:hover{transform:translateY(-4px);box-shadow:0 10px 0 var(--line)}
+.mode .ic{width:54px;height:54px;border-radius:16px;background:var(--mc);display:grid;place-items:center;margin-bottom:6px;box-shadow:0 4px 0 color-mix(in srgb,var(--mc) 60%,#000);transform:rotate(-5deg)}
+.mode .ic svg{width:30px;height:30px}
+.mode h3{font-size:23px;font-weight:800}
+.mode p{margin:0;color:var(--mut);font-size:15px}
+.mode .tag{font:800 13px Nunito,sans-serif;color:var(--mc)}
+.mode[disabled]{opacity:.55;cursor:not-allowed;transform:none}
+.tips{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.tip{background:var(--card);border-radius:18px;padding:16px;font-size:15px;border-top:6px solid var(--tc)}
+.tip b{display:block;font:800 18px "Baloo 2",sans-serif;color:var(--tc)}
+.reset{margin-top:26px;background:none;border:2px dashed var(--line);border-radius:12px;padding:10px 14px;color:var(--mut);font-size:14px;min-height:44px}
+
+/* lojinha */
+.shop{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-bottom:18px}
+.prize{position:relative;background:var(--card);border-radius:22px;padding:18px;box-shadow:0 6px 0 var(--line);display:flex;flex-direction:column;gap:8px;border-top:6px solid var(--pc)}
+.prize h3{font-size:22px}
+.prize .price{font:800 15px Nunito,sans-serif;color:var(--pc)}
+.prize p{margin:0;color:var(--mut);font-size:14.5px}
+.prize .lock{font-size:13.5px;font-weight:800;color:var(--mut);background:var(--card2);border-radius:10px;padding:6px 10px}
+.prize .buy{margin-top:auto;align-self:flex-start;background:var(--pc);color:#fff;border:0;border-radius:14px;padding:10px 18px;font:800 17px "Baloo 2",sans-serif;min-height:46px;box-shadow:0 4px 0 color-mix(in srgb,var(--pc) 60%,#000)}
+.prize .buy[disabled]{opacity:.45;cursor:not-allowed}
+.prize.wide{grid-column:span 2}
+.arena{position:relative;height:190px;background:repeating-linear-gradient(45deg,var(--card2) 0 14px,color-mix(in srgb,var(--card2) 70%,var(--card)) 14px 28px);border-radius:16px;overflow:hidden;touch-action:manipulation}
+.arena .buy{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);margin:0;transition:left .18s ease-out,top .18s ease-out;white-space:nowrap}
+.arena.hard .buy{transition-duration:.1s}
+.arena .msg{position:absolute;left:12px;bottom:8px;font-size:13px;color:var(--mut);font-weight:800}
+.code{font:800 clamp(20px,3vw,26px)/1.2 "Baloo 2",sans-serif;color:var(--pink);background:color-mix(in srgb,var(--pink) 10%,var(--card));border:3px dashed var(--pink);border-radius:16px;padding:12px 16px;text-align:center}
+.vales{display:grid;gap:10px}
+.vale{display:flex;gap:12px;align-items:center;background:var(--card);border-radius:16px;padding:12px 16px;box-shadow:0 4px 0 var(--line);border-left:6px solid var(--pink)}
+.vale b{font:800 18px "Baloo 2",sans-serif}
+.vale small{color:var(--mut);margin-left:auto;font-size:13px}
+
+/* login */
+.loginhero{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column}
+.loginbox{position:relative;z-index:3;max-width:520px;margin:10px auto 30px;background:var(--card);border-radius:28px;padding:clamp(22px,4vw,34px);box-shadow:0 10px 0 rgba(20,40,110,.18)}
+.loginbox h2{font-size:34px;font-weight:800;color:var(--pink)}
+.loginbox .q{font-size:17px;margin:6px 0 16px;color:var(--mut)}
+.field{display:grid;gap:6px;margin-bottom:14px}
+.field label{font-weight:800;font-size:15px}
+.field input{background:var(--card2);border:3px solid transparent;border-radius:14px;padding:12px 14px;min-height:50px;font-size:17px;font-weight:700;width:100%}
+.field input:focus{border-color:var(--pink);outline:none}
+.err{color:var(--bad);font-weight:800;min-height:24px;margin:0 0 6px}
+.or{display:flex;align-items:center;gap:10px;color:var(--mut);font-size:14px;margin:20px 0 14px}
+.or::before,.or::after{content:"";flex:1;height:2px;background:var(--line)}
+.alts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.title-login{text-align:center;color:#fff;font-size:clamp(30px,5vw,48px);font-weight:800;text-shadow:0 3px 0 rgba(20,40,110,.35);margin:10px 16px 6px}
+.title-login span{color:var(--gold)}
+.sub-login{text-align:center;color:light-dark(#163a6b,#c9d4ff);font-weight:700;margin:0 16px 10px}
+
+/* jogo */
+.game{max-width:780px;margin:0 auto;padding:22px max(4vw,16px) 70px;position:relative}
+.game::before{content:"";position:fixed;inset:0;z-index:-1;background:radial-gradient(circle at 10% 0%,color-mix(in srgb,var(--c) 18%,transparent),transparent 40%),radial-gradient(circle at 100% 100%,color-mix(in srgb,var(--gold) 18%,transparent),transparent 40%)}
+.bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.back{background:var(--card);border:0;border-radius:12px;padding:8px 14px;min-height:44px;font-weight:800;box-shadow:0 3px 0 var(--line)}
+.gname{font:800 21px "Baloo 2",sans-serif;flex:1;color:var(--c)}
+.pill{background:var(--card);border-radius:999px;padding:6px 12px;font-weight:800;font-size:15px;white-space:nowrap;box-shadow:0 3px 0 var(--line)}
+.pill.heart{color:#ff4d6d;letter-spacing:2px}
+.pill.combo{background:var(--gold);color:#5a3a00;box-shadow:0 3px 0 #c98a00;animation:pop .35s}
+.pill.pts{background:var(--pink);color:#fff;box-shadow:0 3px 0 #b8245c}
+@keyframes pop{50%{transform:scale(1.18)}}
+.prog{height:14px;background:var(--card);border-radius:99px;overflow:hidden;margin-bottom:20px;box-shadow:inset 0 2px 0 var(--line)}
+.prog i{display:block;height:100%;background:repeating-linear-gradient(45deg,var(--c) 0 12px,color-mix(in srgb,var(--c) 80%,#fff) 12px 24px);border-radius:99px;transition:width .4s}
+.qcard{position:relative;background:var(--card);border-radius:24px;padding:clamp(20px,3vw,30px);box-shadow:0 8px 0 color-mix(in srgb,var(--c) 35%,var(--line))}
+.qmeta{display:inline-block;font:800 13px Nunito,sans-serif;color:#fff;background:var(--c);border-radius:99px;padding:4px 12px;margin-bottom:12px}
+.qtext{font:800 clamp(21px,2.8vw,26px)/1.2 "Baloo 2",sans-serif;margin-bottom:18px}
+.opts{display:grid;gap:10px}
+.opt{display:flex;gap:12px;align-items:center;text-align:left;background:var(--card2);border:3px solid transparent;border-radius:16px;padding:12px 14px;min-height:56px;font-size:16px;font-weight:700;transition:border-color .15s,transform .15s}
+.opt:hover:not([disabled]){border-color:var(--c);transform:translateX(4px)}
+.opt .k{flex:none;width:32px;height:32px;border-radius:10px;background:var(--card);display:grid;place-items:center;font:800 16px "Baloo 2",sans-serif;color:var(--c)}
+.opt.ok{background:var(--okbg);border-color:var(--ok);animation:pop .4s}
+.opt.ok .k{background:var(--ok);color:#fff}
+.opt.bad{background:var(--badbg);border-color:var(--bad);animation:shake .35s}
+.opt.bad .k{background:var(--bad);color:#fff}
+.opt.gone{display:none}
+.opt[disabled]{cursor:default}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.fb{margin-top:16px;border-radius:18px;padding:16px 18px;display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:start}
+.fb .face{grid-row:span 3;width:52px;height:52px}
+.fb.ok{background:var(--okbg)}.fb.bad{background:var(--badbg)}
+.fb h3{font-size:24px}
+.fb.ok h3{color:var(--ok)}.fb.bad h3{color:var(--bad)}
+.fb p{margin:2px 0 0;grid-column:2}
+.ref{display:inline-block;background:var(--card);border-radius:8px;padding:2px 9px;font:800 13px Nunito,sans-serif;color:var(--c);margin-left:8px;vertical-align:4px}
+.kid{background:var(--card);border-radius:12px;padding:10px 12px;margin-top:8px!important;font-size:15px;border-left:4px solid var(--gold)}
+.kid b{color:light-dark(#b7791f,var(--gold))}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;align-items:center}
+.btn{background:var(--c);color:#fff;border:0;border-radius:14px;padding:12px 24px;font:800 18px "Baloo 2",sans-serif;min-height:50px;box-shadow:0 5px 0 color-mix(in srgb,var(--c) 60%,#000)}
+.btn:active{transform:translateY(3px);box-shadow:0 2px 0 color-mix(in srgb,var(--c) 60%,#000)}
+.btn.alt{background:var(--card2);color:var(--ink);box-shadow:0 5px 0 var(--line)}
+.btn.joker{background:var(--gold);color:#5a3a00;box-shadow:0 5px 0 #c98a00}
+.btn.pink{background:var(--pink);box-shadow:0 5px 0 #b8245c}
+.btn.full{width:100%}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.hint{font-size:13px;color:var(--mut)}
+.clock{width:120px;height:120px;margin:0 auto;position:relative}
+.clock svg{width:100%;height:100%;transform:rotate(-90deg)}
+.clock b{position:absolute;inset:0;display:grid;place-items:center;font:800 42px "Baloo 2",sans-serif;color:var(--c)}
+.clock.low b{color:var(--bad)}
+.ce{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}
+.ce button{border:0;border-radius:18px;padding:18px;font:800 26px "Baloo 2",sans-serif;color:#fff;min-height:70px}
+.ce .c{background:#12a150;box-shadow:0 6px 0 #0a6b35}.ce .e{background:#e5383b;box-shadow:0 6px 0 #9b1c1f}
+.ce button:active{transform:translateY(3px)}
+.last{margin-top:16px;font-size:15px;border-radius:14px;padding:10px 14px;min-height:46px;background:var(--card2)}
+.last.ok{background:var(--okbg)}.last.bad{background:var(--badbg)}
+.sets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.sets button{background:var(--card);border:0;border-radius:999px;padding:8px 14px;font-weight:800;font-size:14px;min-height:42px;box-shadow:0 3px 0 var(--line)}
+.sets button.on{background:var(--c);color:#fff;box-shadow:0 3px 0 color-mix(in srgb,var(--c) 60%,#000)}
+.sets button.done::after{content:" ✓";color:var(--ok)}
+.sets button.on.done::after{color:#fff}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.col{display:grid;gap:10px;align-content:start}
+.tile{background:var(--card);border:3px solid transparent;border-radius:16px;padding:12px;min-height:60px;text-align:left;font-size:15px;font-weight:700;box-shadow:0 4px 0 var(--line);transition:all .15s}
+.tile.L{font:800 17px/1.2 "Baloo 2",sans-serif;color:var(--c)}
+.tile:hover:not([disabled]){border-color:var(--c)}
+.tile.sel{border-color:var(--c);background:color-mix(in srgb,var(--c) 12%,var(--card));transform:scale(1.03)}
+.tile.ok{border-color:var(--ok);background:var(--okbg);opacity:.7;box-shadow:none}
+.tile.bad{border-color:var(--bad);background:var(--badbg);animation:shake .3s}
+.trophy{width:110px;height:110px;margin:0 auto}
+.big{font:800 clamp(56px,10vw,84px)/1 "Baloo 2",sans-serif;color:var(--c)}
+.endstars{font-size:46px;color:var(--gold);letter-spacing:6px;text-shadow:0 3px 0 #c98a00}
+.endstars i{font-style:normal;color:var(--line);text-shadow:none}
+.rev{margin-top:24px;display:grid;gap:12px}
+.rev>div{background:var(--card);border-radius:16px;padding:14px 16px;font-size:15px;border-left:6px solid var(--bad);box-shadow:0 4px 0 var(--line)}
+.rev b{display:block;font:800 17px/1.25 "Baloo 2",sans-serif;margin-bottom:4px}
+.rev .ans{color:var(--ok);font-weight:800}
+.secret{margin:22px 0 0;display:grid;gap:10px;text-align:center}
+.secret h3{font-size:24px;color:var(--pink)}
+
+/* leitura */
+.reader{max-width:960px;margin:0 auto;padding:22px max(4vw,16px) 70px}
+.rtabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.rtabs button{background:var(--card);border:0;border-radius:999px;padding:8px 16px;font-weight:800;font-size:15px;min-height:44px;box-shadow:0 3px 0 var(--line)}
+.rtabs button.on{background:#7048e8;color:#fff;box-shadow:0 3px 0 #4a2bb5}
+.rbody{background:var(--card);border-radius:24px;padding:clamp(18px,3vw,30px);box-shadow:0 8px 0 var(--line)}
+.rbody .lead{font-size:17px;margin-top:0}
+.rbody .wk{border-top:2px solid var(--line);padding-top:14px;margin-top:16px}
+.rbody .wk h3{font-size:22px;color:#7048e8;margin-bottom:6px}
+.rbody a{color:#3a86ff}
+.rbody ol,.rbody ul{padding-left:22px}.rbody li{margin:4px 0}
+.pdfwrap{margin-top:14px;border-radius:16px;overflow:hidden;background:var(--card2);height:78vh;min-height:420px}
+.pdfwrap iframe{width:100%;height:100%;border:0;display:block}
+
+/* modal e efeitos */
+.modal{position:fixed;inset:0;z-index:20;background:rgba(10,12,40,.55);display:grid;place-items:center;padding:20px}
+.modal[hidden]{display:none}
+.modal .box{background:var(--card);border-radius:26px;padding:28px 24px;max-width:440px;text-align:center;box-shadow:0 10px 0 rgba(0,0,0,.2);animation:pop .4s}
+.modal h3{font-size:28px;color:var(--pink);margin-bottom:8px}
+.modal p{margin:0 0 16px;font-size:17px}
+.toast{position:fixed;left:50%;top:18px;transform:translate(-50%,-160px);background:var(--gold);color:#5a3a00;font:800 18px "Baloo 2",sans-serif;padding:10px 20px;border-radius:999px;transition:transform .3s;z-index:30;box-shadow:0 5px 0 #c98a00;text-align:center;max-width:92vw}
+.toast.on{transform:translate(-50%,0)}
+#fx{position:fixed;inset:0;pointer-events:none;z-index:25;width:100%;height:100%}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media(max-width:960px){.modes,.tips{grid-template-columns:1fr 1fr}.shop{grid-template-columns:1fr 1fr}.prize.wide{grid-column:span 2}}
+@media(max-width:640px){
+ .scene{aspect-ratio:auto;display:grid;grid-template-columns:1fr 1fr;gap:18px 8px;padding:18px 0 90px}
+ .scene>svg{display:none}.land>.bg .trees{display:none}
+ .st{position:static;transform:none;width:auto}
+ .modes,.tips,.shop{grid-template-columns:1fr}.prize.wide{grid-column:auto}
+ .alts{grid-template-columns:1fr}
+ .cols{gap:8px}.tile{font-size:14px;padding:10px}.tile.L{font-size:15px}
+ .pdfwrap{height:60vh}
+}
+</style>
+</head>
+<body>
+<canvas id="fx"></canvas>
+<div class="toast" id="toast"></div>
+<div class="modal" id="modal" hidden><div class="box"><h3 id="mtitle"></h3><p id="mtext"></p><button class="btn pink" id="mclose">Entendi</button></div></div>
+
+<!-- LOGIN -->
+<section class="view" id="login">
+ <div class="hero loginhero">
+  <h1 class="title-login">Fisiologia <span>jogando e estudando</span></h1>
+  <p class="sub-login">Ciências Fisiológicas, semanas 11 a 17</p>
+  <form class="loginbox" id="lform" autocomplete="off">
+   <h2>Você é a Marianne?</h2>
+   <p class="q">Então prova: entra com seu nome e a data do nosso aniversário de namoro.</p>
+   <div class="field"><label for="luser">Usuário</label><input id="luser" placeholder="Seu nome" autocomplete="off"></div>
+   <div class="field"><label for="lpass">Senha: data do nosso aniversário de namoro</label><input id="lpass" type="date"></div>
+   <p class="err" id="lerr" aria-live="polite"></p>
+   <button class="btn pink full" type="submit">Entrar</button>
+   <div class="or">ou</div>
+   <div class="alts">
+    <button class="btn alt" type="button" data-std>Sou só estudante</button>
+    <button class="btn alt" type="button" data-read>Só quero ler os slides</button>
+   </div>
+  </form>
+ </div>
+</section>
+
+<!-- INÍCIO -->
+<section class="view" id="home" hidden>
+ <div class="hero">
+  <div class="wrap toplinks"><button data-read>Só quero ler os slides</button><button id="logout">Sair</button></div>
+  <div class="wrap top">
+   <div><h1 id="htitle"></h1><p id="hsub"></p></div>
+   <div class="stats" id="stats"></div>
+  </div>
+  <div class="land"><svg class="bg" id="bg" viewBox="0 0 1400 420" preserveAspectRatio="xMidYMax slice" aria-hidden="true"></svg><div class="wrap"><div class="scene" id="scene"></div></div></div>
+ </div>
+ <main class="wrap">
+  <div id="shopsec"></div>
+  <h2 class="sec">Modos de jogo</h2>
+  <div class="modes" id="modes"></div>
+  <h2 class="sec">Como funciona</h2>
+  <div class="tips" id="tips"></div>
+  <button class="reset" id="reset">Zerar meu progresso</button>
+ </main>
+</section>
+
+<!-- QUIZ -->
+<section class="view game" id="play" hidden>
+ <div class="bar"><button class="back" data-home>← Trilha</button><div class="gname" id="gname"></div><span class="pill heart" id="lives"></span><span class="pill combo" id="combo" hidden></span><span class="pill" id="gxp"></span></div>
+ <div class="prog"><i id="gprog"></i></div>
+ <div class="qcard">
+  <div class="qmeta" id="qmeta"></div>
+  <div class="qtext" id="qtext"></div>
+  <div class="opts" id="opts"></div>
+  <div id="fb"></div>
+  <div class="row" id="qrow"></div>
+ </div>
+</section>
+
+<!-- RELÂMPAGO -->
+<section class="view game" id="flash" hidden style="--c:#f59e0b">
+ <div class="bar"><button class="back" data-home>← Trilha</button><div class="gname">Relâmpago: Certo ou Errado</div><span class="pill" id="fscore"></span></div>
+ <div class="qcard">
+  <div class="clock" id="clock"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="52" fill="none" stroke="var(--line)" stroke-width="10"/><circle id="ring" cx="60" cy="60" r="52" fill="none" stroke="var(--c)" stroke-width="10" stroke-linecap="round" stroke-dasharray="326.7" stroke-dashoffset="0"/></svg><b id="ftime">60</b></div>
+  <div class="qtext" id="ftext" style="text-align:center;margin:18px 0 0"></div>
+  <div class="ce"><button class="c" id="fc">Certo</button><button class="e" id="fe">Errado</button></div>
+  <div class="last" id="flast"></div>
+ </div>
+</section>
+
+<!-- PARES -->
+<section class="view game" id="match" hidden style="--c:#00b894">
+ <div class="bar"><button class="back" data-home>← Trilha</button><div class="gname">Combine os pares</div><span class="pill" id="mmiss"></span></div>
+ <div class="sets" id="sets"></div>
+ <p class="hint" style="margin:0 0 12px">Toque num item da esquerda e depois no par correto da direita.</p>
+ <div class="cols"><div class="col" id="mL"></div><div class="col" id="mR"></div></div>
+ <div id="mdone"></div>
+</section>
+
+<!-- FIM -->
+<section class="view game" id="end" hidden>
+ <div class="bar"><button class="back" data-home>← Trilha</button><div class="gname" id="ename"></div></div>
+ <div class="qcard" style="text-align:center">
+  <div class="trophy" id="trophy"></div>
+  <div class="endstars" id="estars"></div>
+  <div class="big" id="ebig"></div>
+  <p id="emsg" style="font-size:18px;margin:8px 0 0"></p>
+  <div id="esecret"></div>
+  <div class="row" style="justify-content:center" id="erow"></div>
+ </div>
+ <div class="rev" id="erev"></div>
+</section>
+
+<!-- LEITURA -->
+<section class="view" id="read" hidden>
+ <div class="reader">
+  <div class="bar"><button class="back" id="rback">← Voltar</button><div class="gname" style="color:#7048e8">Material para ler</div></div>
+  <div class="rtabs" id="rtabs"></div>
+  <div class="rbody" id="rbody"></div>
+ </div>
+</section>
+
+<script src="data.js"></script>
+<script src="leitura.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
